@@ -32,7 +32,7 @@ def main():
         cur_page += 1
 
     prices = [prod["OriginPrice"] for prod in all_prods]
-    std_dev = statistics.stdev(prices)
+    pstd_dev = statistics.pstdev(prices)
     mean_price = statistics.mean(prices)
     i5_prices = []
 
@@ -50,7 +50,7 @@ def main():
         for prod in all_prods:
             product_id = prod["Id"]
             price = prod["OriginPrice"]
-            price_z_score = round((price - mean_price) / std_dev, 6)
+            price_z_score = round((price - mean_price) / pstd_dev, 6)
 
             f1.write(f"{product_id}\n")
             if (
