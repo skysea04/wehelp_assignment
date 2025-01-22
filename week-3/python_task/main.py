@@ -50,32 +50,53 @@ class Connection:
     to_idx: Index
     weight: float
 
+    @property
+    def index(self):
+        return (
+            self.from_idx.layer,
+            self.from_idx.node,
+            self.to_idx.layer,
+            self.to_idx.node,
+        )
+
 
 @dataclass
 class Network:
     layer_node_cnts: list[int]
     connections: list[Connection] = field(default_factory=list)
+    connection_basic_weight: float = 0.5
 
     def __post_init__(self):
-        self.connection_dict = {
-            (
-                connection.from_idx.layer,
-                connection.from_idx.node,
-                connection.to_idx.layer,
-                connection.to_idx.node,
-            ): connection.weight
-            for connection in self.connections
-        }
-
         self.layers: list[Layer] = [
             Layer(i, node_cnt)
             if i == len(self.layer_node_cnts) - 1
             else LayerWithBias(i, node_cnt)
             for i, node_cnt in enumerate(self.layer_node_cnts)
         ]
-
         self.input_layer = self.layers[0]
         self.output_layer = self.layers[-1]
+
+        self.connection_dict = {
+            (
+                prev_node.index.layer,
+                prev_node.index.node,
+                cur_node.index.layer,
+                cur_node.index.node,
+            ): self.connection_basic_weight
+            for prev_layer, cur_layer in zip(self.layers[:-1], self.layers[1:])
+            for prev_node in prev_layer.nodes
+            for cur_node in (
+                cur_layer.nodes[:-1]
+                if cur_layer != self.output_layer
+                else cur_layer.nodes
+            )
+        }
+
+        for connection in self.connections:
+            if connection.index not in self.connection_dict:
+                continue
+
+            self.connection_dict[connection.index] = connection.weight
 
     def forward(self, input: list[float]) -> list[float]:
         if len(input) != self.input_layer.node_cnt:
