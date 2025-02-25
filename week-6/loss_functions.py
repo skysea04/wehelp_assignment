@@ -61,9 +61,8 @@ class BinaryCrossEntropy(LossFunction):
     def get_total_loss(self, outputs: list[float], excepts: list[float]) -> float:
         self.set_output_and_except(outputs, excepts)
 
-        epsilon = 1e-15  # 防止 log(0)
+        epsilon = 1e-15  # prevent log(0)
 
-        # 確保輸出值在有效範圍內
         clipped_outputs = [max(min(x, 1 - epsilon), epsilon) for x in self.outputs]
 
         return sum(

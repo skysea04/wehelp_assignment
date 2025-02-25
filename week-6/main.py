@@ -99,7 +99,7 @@ if __name__ == "__main__":
     threshold = 0.5
 
     # Training
-    for i in range(40):
+    for i in range(1, 51):
         correct_cnt = 0
         cnter = 0
         for input, expect in zip(passenger_lst, survived_lst):
@@ -123,8 +123,8 @@ if __name__ == "__main__":
         if survived == expect[0]:
             correct_cnt += 1
 
-    correct_rate = correct_cnt / len(passenger_lst)
-    print(f"Task 2: {correct_rate}\n")
+    correct_rate = round(correct_cnt / len(passenger_lst) * 100, 2)
+    print(f"Task 2: {correct_rate}%\n")
 
     # Task 3
     print("Task 3-1:")
