@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Generator
 
-from constants import DATA_DIR
+from constants import CLEANED_FILE, DATA_DIR
 
 
 @dataclass
@@ -39,7 +39,7 @@ class ArticleFileManager:
 class CleanedFileManager:
     @property
     def csv_file_path(self) -> Path:
-        return DATA_DIR / "cleaned_file.csv"
+        return DATA_DIR / f"{CLEANED_FILE}.csv"
 
     def init_csv_file(self):
         with open(self.csv_file_path, "w") as f:

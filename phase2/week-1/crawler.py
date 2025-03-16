@@ -56,7 +56,7 @@ def retry(func: Callable, max_retries: int = 3, delay: int = 3):
 
 @retry
 def get_soup(url: str) -> BeautifulSoup:
-    response = requests.get(url, cookies={"over18": "1"})
+    response = requests.get(url, cookies={"over18": "1"}, timeout=10)
     soup = BeautifulSoup(response.text, "html.parser")
     file_log.info(f"Crawled {url}")
 

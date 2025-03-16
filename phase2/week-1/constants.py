@@ -15,3 +15,5 @@ BOARDS = [
     "stock",
     "Tech_Job",
 ]
+
+CLEANED_FILE = "cleaned_file"
