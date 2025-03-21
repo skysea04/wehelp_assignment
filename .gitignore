@@ -174,4 +174,5 @@ cython_debug/
 .DS_Store
 
 # Data
-data/
+phase2/data/*.csv
+phase2/data/tokenized_file.txt
