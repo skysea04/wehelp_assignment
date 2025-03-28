@@ -69,3 +69,8 @@ class TokenizedFileManager:
         with open(self.file_path, "a") as f:
             for tokenized_title in tokenized_titles:
                 f.write(f"{tokenized_title}\n")
+
+    def read_titles(self) -> Generator[str, None, None]:
+        with open(self.file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                yield line.strip()

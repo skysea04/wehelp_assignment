@@ -1,4 +1,5 @@
 from ckip_transformers.nlp import CkipPosTagger, CkipWordSegmenter
+
 from constants import BATCH_SIZE, IGNORE_TAGS
 from logger import stream_log
 from utils import CleanedFileManager, TokenizedFileManager
@@ -10,7 +11,7 @@ pos_driver = CkipPosTagger(model="bert-base")
 stream_log.info("Initializing drivers ... done")
 
 
-def tokenizer(board_names: list[str], texts: list[str]) -> list[str]:
+def tokenize(board_names: list[str], texts: list[str]) -> list[str]:
     ws = ws_driver(texts)
     pos = pos_driver(ws)
 
@@ -45,9 +46,9 @@ if __name__ == "__main__":
         texts.append(title)
 
         if len(board_names) == BATCH_SIZE:
-            tokenized_texts = tokenizer(board_names, texts)
+            tokenized_texts = tokenize(board_names, texts)
             tokenized_file_manager.write_tokenized_title(tokenized_texts)
             board_names, texts = [], []
 
-    tokenized_texts = tokenizer(board_names, texts)
+    tokenized_texts = tokenize(board_names, texts)
     tokenized_file_manager.write_tokenized_title(tokenized_texts)

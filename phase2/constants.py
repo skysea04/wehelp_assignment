@@ -5,18 +5,40 @@ DATA_DIR = BASE_DIR / "data"
 
 BATCH_SIZE = 1000
 
+BASEBALL = "baseball"
+BOY_GIRL = "Boy-Girl"
+C_CHAT = "c_chat"
+HATE_POLITICS = "hatepolitics"
+LIFE_IS_MONEY = "Lifeismoney"
+MILITARY = "Military"
+PC_SHOPPING = "pc_shopping"
+STOCK = "stock"
+TECH_JOB = "Tech_Job"
+
 # PTT
 BOARDS = [
-    "baseball",
-    "Boy-Girl",
-    "c_chat",
-    "hatepolitics",
-    "Lifeismoney",
-    "Military",
-    "pc_shopping",
-    "stock",
-    "Tech_Job",
+    BASEBALL,
+    BOY_GIRL,
+    C_CHAT,
+    HATE_POLITICS,
+    LIFE_IS_MONEY,
+    MILITARY,
+    PC_SHOPPING,
+    STOCK,
+    TECH_JOB,
 ]
+
+BOARD_TAG_MAP = {
+    BASEBALL: 1,
+    BOY_GIRL: 2,
+    C_CHAT: 3,
+    HATE_POLITICS: 4,
+    LIFE_IS_MONEY: 5,
+    MILITARY: 6,
+    PC_SHOPPING: 7,
+    STOCK: 8,
+    TECH_JOB: 9,
+}
 
 CLEANED_FILE = "cleaned_file"
 TOKENIZED_FILE = "tokenized_file"

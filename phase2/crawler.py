@@ -5,6 +5,7 @@ from typing import Callable
 
 import requests
 from bs4 import BeautifulSoup
+
 from constants import BOARDS
 from logger import file_log, stream_log
 from utils import ArticleFileManager
@@ -24,6 +25,7 @@ def get_articles(soup: BeautifulSoup) -> list[tuple[str, str]]:
             title = title_tag.text.strip()
             link = f"{BASE_URL}{title_tag['href']}"
             articles.append((title, link))
+
     return articles
 
 
