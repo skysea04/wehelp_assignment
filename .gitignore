@@ -175,5 +175,5 @@ cython_debug/
 
 # Data
 phase2/data/*.csv
-phase2/data/tokenized_file.txt
+phase2/data/*.txt
 *.d2v*

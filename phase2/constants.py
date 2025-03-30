@@ -42,6 +42,7 @@ BOARD_TAG_MAP = {
 
 CLEANED_FILE = "cleaned_file"
 TOKENIZED_FILE = "tokenized_file"
+TOKENIZED_FILE_FOR_DOC2VEC = "tokenzied_file_for_doc2vec.txt"
 
 # Tokenizer
 IGNORE_TAGS = [
