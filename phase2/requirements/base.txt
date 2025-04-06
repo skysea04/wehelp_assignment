@@ -2,3 +2,6 @@ requests
 beautifulsoup4
 ckip-transformers
 gensim
+scikit-learn
+torch
+torchvision

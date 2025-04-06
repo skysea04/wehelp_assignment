@@ -3,10 +3,11 @@ import os
 from gensim.models.doc2vec import Doc2Vec
 from logger import stream_log
 from utils import TokenizedFileManager
+
 CHECK_COUNT = 1000
 
 # load model
-model_path = os.path.join("data", f"embedding_model_150_250_all.d2v")
+model_path = os.path.join("data", "embedding_model_100_2_5_15_1_0_0.1.d2v")
 model: Doc2Vec = Doc2Vec.load(model_path)
 
 file_manager = TokenizedFileManager()
@@ -18,7 +19,7 @@ for i, line in enumerate(file_manager.read_titles()):
 
     processed_count += 1
 
-    new_vector = model.infer_vector(line.split(","))
+    new_vector = model.infer_vector(line.split(",")[1:])
     similar_docs = model.dv.most_similar([new_vector], topn=2)
 
     # check if the most similar document is itself

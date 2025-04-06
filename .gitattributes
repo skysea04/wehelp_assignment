@@ -1,0 +1,6 @@
+data/*.npy filter=lfs diff=lfs merge=lfs -text
+data/*.d2v filter=lfs diff=lfs merge=lfs -text
+data/*.pth filter=lfs diff=lfs merge=lfs -text
+phase2/data/*.d2v filter=lfs diff=lfs merge=lfs -text
+phase2/data/*.pth filter=lfs diff=lfs merge=lfs -text
+phase2/data/*.npy filter=lfs diff=lfs merge=lfs -text

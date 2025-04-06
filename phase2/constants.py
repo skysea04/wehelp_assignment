@@ -28,21 +28,23 @@ BOARDS = [
     TECH_JOB,
 ]
 
-BOARD_TAG_MAP = {
-    BASEBALL: 1,
-    BOY_GIRL: 2,
-    C_CHAT: 3,
-    HATE_POLITICS: 4,
-    LIFE_IS_MONEY: 5,
-    MILITARY: 6,
-    PC_SHOPPING: 7,
-    STOCK: 8,
-    TECH_JOB: 9,
-}
+# BOARD_TAG_MAP = {
+#     BASEBALL: 1,
+#     BOY_GIRL: 2,
+#     C_CHAT: 3,
+#     HATE_POLITICS: 4,
+#     LIFE_IS_MONEY: 5,
+#     MILITARY: 6,
+#     PC_SHOPPING: 7,
+#     STOCK: 8,
+#     TECH_JOB: 9,
+# }
 
 CLEANED_FILE = "cleaned_file"
 TOKENIZED_FILE = "tokenized_file"
+EMBEDDING_RESULT_FILE = "embedding_result"
 TOKENIZED_FILE_FOR_DOC2VEC = "tokenzied_file_for_doc2vec.txt"
+
 
 # Tokenizer
 IGNORE_TAGS = [

@@ -176,4 +176,4 @@ cython_debug/
 # Data
 phase2/data/*.csv
 phase2/data/*.txt
-*.d2v*
+
