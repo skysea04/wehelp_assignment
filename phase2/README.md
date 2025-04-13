@@ -30,7 +30,7 @@ tokenized_file 文章數：1,067,546
 到了最關鍵的分類模型，我設計了一個架構幫助我快速閱覽不同參數的實驗數據，
 實驗數據記錄檔：命名規則 `title_classification_result_{data_size}.csv`，幫助我快速評估不同訓練資料量的呈現結果，裡面會記錄`模型樣態`、`累積 epochs` 與`預測正確率`。
 訓練模型：命名規則 `title_classifier_{layer_sizes}_{data_size}.pth`，讓我快速瀏覽有哪些 layer 組合已經被嘗試過。
-一開始的 data_size 5000 為亂槍打鳥的嘗試，跑一組 epoch 不到 1 秒，可以快速查看 epoch 數量對預測正確率的進展程度，但才 5000 筆資料沒什麼訓練價值可言，後來跳到 100,000 筆文章，實驗才開始有意義，實驗大致歷程如下：
+一開始的 [5000 筆資料](./data/title_classification_result_5000.csv) 為亂槍打鳥的嘗試，跑一組 epoch 不到 1 秒，可以快速查看 epoch 數量對預測正確率的進展程度，但才 5000 筆資料沒什麼訓練價值可言，後來跳到 [100,000 筆資料](./data/title_classification_result_100000.csv)，實驗才開始有意義，實驗大致歷程如下：
 1. 實驗 hidden layer 數量對模型的影響 -> 發現 hidden layer 兩層的效果較好，中間順便測試 SGD & Adam 發現，Adam 能快速把正確率在很少的 epoch 就拉到相對的水平(60%)
 2. 以固定輪次 (50 epochs) 並以「後一個 layer vector_size ~= 前一個 layer vector_size / 2 的遞減方式」實驗 `input_layer` (文章 embedding) `vector_size` 對模型的影響 -> 發現 `vector_size` 越高似乎效果越好。
 3. 由於 embedding layer `vector_size` 越大 model size 也越大，尤其 `vector_size` 300 的 embedding layer 已經大到有 1.X G，認為不是好方法，於是嘗試用較小的 input layer `vector_size` 接到較大的 hidden layer `vector_size` 看效果如何，並將 epochs 改為 10 加速實驗 -> 發現效果還不錯。
@@ -39,7 +39,7 @@ tokenized_file 文章數：1,067,546
 6. 確認實驗方向正確，以 [1,000,000筆資料](./data/title_classification_result_1000000.csv) 以相同 embedding model 當作基底進行訓練，但增大 epoch 數量以求最大預測率。
 
 最後的各項參數指標
-1. Arrangement of Linear Layers: 150*1000*50*9
+1. Arrangement of Linear Layers: `150*1000*50*9`
 2. Activation Function for Hidden Layers: ReLU
 3. Activation Function for Output Layers: Softmax
 4. Loss Function: Categorical Cross Entropy
