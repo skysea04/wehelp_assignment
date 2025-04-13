@@ -9,10 +9,7 @@ result_file_manager = EmbeddingResultFileManager()
 with open(result_file_manager.file_path, "r") as f:
     reader = csv.DictReader(f)
     for row in reader:
-        if (
-            float(row["self_similarity"]) < 0.71
-            or float(row["second_similarity"]) < 0.8
-        ):
+        if float(row["self_similarity"]) < 0.8 or float(row["second_similarity"]) < 0.9:
             model_path = Path(
                 DATA_DIR,
                 f"embedding_model_{row['vector_size']}_{row['window']}_{row['min_count']}_{row['epochs']}_{row['hs']}_{row['negative']}_{row['sample']}.d2v",

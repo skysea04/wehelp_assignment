@@ -1,0 +1,3 @@
+layers,epochs,train_accuracy,validation_accuracy
+55_40_25_9_5000,200,0.757,0.658
+55_80_30_9_5000,320,0.777,0.704

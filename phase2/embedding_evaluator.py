@@ -4,10 +4,10 @@ from gensim.models.doc2vec import Doc2Vec
 from logger import stream_log
 from utils import TokenizedFileManager
 
-CHECK_COUNT = 1000
+CHECK_COUNT = 2000
 
 # load model
-model_path = os.path.join("data", "embedding_model_100_2_5_15_1_0_0.1.d2v")
+model_path = os.path.join("data", "embedding_model_55_2_5_10_1_0_0.d2v")
 model: Doc2Vec = Doc2Vec.load(model_path)
 
 file_manager = TokenizedFileManager()

@@ -18,7 +18,7 @@ def tokenize(board_names: list[str], texts: list[str]) -> list[str]:
     tokenized_texts = []
     for board_name, text_ws, text_pos in zip(board_names, ws, pos):
         tokenized_texts.append(
-            f"{board_name}, {convert_ws_pos_sentence(text_ws, text_pos)}"
+            f"{board_name},{convert_ws_pos_sentence(text_ws, text_pos)}"
         )
 
     return tokenized_texts
@@ -30,9 +30,11 @@ def convert_ws_pos_sentence(text_ws: list[str], text_pos: list[str]) -> str:
         if word_pos in IGNORE_TAGS:
             continue
 
+        word_ws = word_ws.strip()
+
         res.append(word_ws)
 
-    return ", ".join(res)
+    return ",".join(res)
 
 
 if __name__ == "__main__":

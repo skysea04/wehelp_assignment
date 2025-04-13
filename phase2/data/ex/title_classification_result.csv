@@ -1,0 +1,3 @@
+hidden_sizes,epochs,train_accuracy,validation_accuracy
+100_40_9,10,0.632,0.63
+100_50_30_9,20,0.676,0.667

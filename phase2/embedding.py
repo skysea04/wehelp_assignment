@@ -6,7 +6,7 @@ from gensim.models.doc2vec import Doc2Vec
 from utils import TokenizedFileManager, EmbeddingResultFileManager, get_optimal_workers
 from constants import DATA_DIR, TOKENIZED_FILE_FOR_DOC2VEC
 
-CHECK_COUNT = 1000
+CHECK_COUNT = 2000
 
 logging.basicConfig(
     format="%(asctime)s : %(levelname)s : %(message)s", level=logging.INFO
@@ -63,12 +63,12 @@ if __name__ == "__main__":
     result_file_manager = EmbeddingResultFileManager()
     result_file_manager.init_file()
 
-    vector_sizes = [100]
+    vector_sizes = [300]
     windows = [2]
     min_counts = [5]
-    epochs_lst = [10, 12, 15]
+    epochs_lst = [10]
     hs_negative = [(1, 0)]
-    sample = [0.1]
+    sample = [0]
 
     # Create all possible combinations
     combinations = list(
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         first_correct_count = 0
         second_correct_count = 0
         for i, line in enumerate(tokenized_file_manager.read_titles()):
-            new_vector = model.infer_vector(" ".join(line.split(",")[1:]))
+            new_vector = model.infer_vector(line.split(",")[1:])
             similar_docs = model.dv.most_similar([new_vector], topn=2)
             # check if the most similar document is itself
             if similar_docs[0][0] == i:
@@ -103,7 +103,7 @@ if __name__ == "__main__":
             elif similar_docs[1][0] == i:
                 second_correct_count += 1
 
-            if i % 200 == 0:
+            if i % 200 == 0 and i > 0:
                 logger.info(f"Evaluating progress: {i}/{CHECK_COUNT}")
 
             if i > CHECK_COUNT:

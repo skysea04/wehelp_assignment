@@ -13,6 +13,7 @@ def clean_articles_and_append_to_cleaned_file(
     for title, _ in article_file_manager.read_articles():
         title = title.strip()
         title = re.sub(r"^Re:|^Fw:", "", title)
+        title = re.sub(r"\[.*?\]", "", title)  # Remove [XXX] patterns
         title = title.strip().lower()
 
         cleaned_file_manager.write_cleaned_title(board_name, title)

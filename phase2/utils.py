@@ -7,7 +7,14 @@ from functools import wraps
 from logger import stream_log
 import multiprocessing
 
-from constants import CLEANED_FILE, DATA_DIR, TOKENIZED_FILE, EMBEDDING_RESULT_FILE
+
+from constants import (
+    CLEANED_FILE,
+    DATA_DIR,
+    TOKENIZED_FILE,
+    EMBEDDING_RESULT_FILE,
+    TITLE_CLASSIFICATION_RESULT_FILE,
+)
 
 
 @dataclass
@@ -112,6 +119,70 @@ class EmbeddingResultFileManager:
             f.write(
                 f"{vector_size},{window},{min_count},{epochs},{hs},{negative},{sample},{self_similarity},{second_similarity}\n"
             )
+
+
+@dataclass
+class TitleClassificationResultFileManager:
+    data_size: int
+
+    @property
+    def file_path(self) -> Path:
+        return DATA_DIR / f"{TITLE_CLASSIFICATION_RESULT_FILE}_{self.data_size}.csv"
+
+    def init_file(self):
+        if not Path(self.file_path).exists():
+            file = Path(self.file_path)
+            file.write_text("layers,epochs,train_accuracy,validation_accuracy\n")
+
+    def edit_title_classification_result(
+        self,
+        layers: str,
+        epochs: int,
+        train_accuracy: float,
+        validation_accuracy: float,
+    ):
+        # Read existing data
+        rows = []
+        if Path(self.file_path).exists():
+            with open(self.file_path, "r", newline="") as f:
+                reader = csv.DictReader(f)
+                rows = list(reader)
+
+        # Find matching row
+        found = False
+        for row in rows:
+            if row["layers"] == layers:
+                # Update existing row
+                row["epochs"] = str(int(row["epochs"]) + epochs)
+                row["train_accuracy"] = str(train_accuracy)
+                row["validation_accuracy"] = str(validation_accuracy)
+                found = True
+                break
+
+        # If no matching row found, add new row
+        if not found:
+            rows.append(
+                {
+                    "layers": layers,
+                    "epochs": str(epochs),
+                    "train_accuracy": str(train_accuracy),
+                    "validation_accuracy": str(validation_accuracy),
+                }
+            )
+
+        # Write back to file
+        with open(self.file_path, "w", newline="") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=[
+                    "layers",
+                    "epochs",
+                    "train_accuracy",
+                    "validation_accuracy",
+                ],
+            )
+            writer.writeheader()
+            writer.writerows(rows)
 
 
 def get_optimal_workers() -> int:

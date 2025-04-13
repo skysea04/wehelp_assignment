@@ -43,6 +43,7 @@ BOARDS = [
 CLEANED_FILE = "cleaned_file"
 TOKENIZED_FILE = "tokenized_file"
 EMBEDDING_RESULT_FILE = "embedding_result"
+TITLE_CLASSIFICATION_RESULT_FILE = "title_classification_result"
 TOKENIZED_FILE_FOR_DOC2VEC = "tokenzied_file_for_doc2vec.txt"
 
 
