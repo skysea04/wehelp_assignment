@@ -6,7 +6,7 @@ from gensim.models.doc2vec import Doc2Vec
 from utils import TokenizedFileManager, EmbeddingResultFileManager, get_optimal_workers
 from constants import DATA_DIR, TOKENIZED_FILE_FOR_DOC2VEC
 
-CHECK_COUNT = 2000
+CHECK_COUNT = 200
 
 logging.basicConfig(
     format="%(asctime)s : %(levelname)s : %(message)s", level=logging.INFO
@@ -45,7 +45,8 @@ def train_doc2vec(
         min_count=min_count,
         workers=get_optimal_workers(),
         epochs=epochs,
-        dm=1,
+        dbow_words=1,
+        dm=0,
         hs=hs,
         negative=negative,
         sample=sample,
@@ -63,7 +64,7 @@ if __name__ == "__main__":
     result_file_manager = EmbeddingResultFileManager()
     result_file_manager.init_file()
 
-    vector_sizes = [300]
+    vector_sizes = [30]
     windows = [2]
     min_counts = [5]
     epochs_lst = [10]

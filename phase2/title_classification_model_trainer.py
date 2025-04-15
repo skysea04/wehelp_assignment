@@ -16,12 +16,6 @@ import os
 import numpy as np
 from tqdm import tqdm
 
-device = (
-    torch.accelerator.current_accelerator().type
-    if torch.accelerator.is_available()
-    else "cpu"
-)
-
 
 class TitleClassificationDataset(Dataset):
     def __init__(
@@ -129,12 +123,12 @@ def train_model(
     else:
         board_label_map = train_dataset.board_label_map
 
-    classifier = classifier.to(device)
+    # classifier = classifier.to(device)
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(classifier.parameters(), lr=learning_rate)
 
-    for epoch in range(epochs):
+    for epoch in range(1, epochs + 1):
         train_accuracy = train(
             classifier, train_loader, optimizer, loss_fn, epoch, epochs
         )
@@ -166,10 +160,10 @@ def train(
     correct = 0
     total = 0
 
-    pbar = tqdm(train_loader, desc=f"Epoch {epoch + 1}/{epochs}")
+    pbar = tqdm(train_loader, desc=f"Epoch {epoch}/{epochs}")
 
     for inputs, labels in pbar:
-        inputs, labels = inputs.to(device), labels.to(device)
+        # inputs, labels = inputs.to(device), labels.to(device)
         optimizer.zero_grad()
         outputs = classifier(inputs)
         _, target_indices = torch.max(labels, 1)
@@ -184,7 +178,7 @@ def train(
 
     train_accuracy = round(correct / total, 3)
     stream_log.info(
-        f"Epoch [{epoch + 1}/{epochs}], Loss: {total_loss / len(train_loader):.4f}, "
+        f"Epoch [{epoch}/{epochs}], Loss: {total_loss / len(train_loader):.4f}, "
         f"Train Accuracy: {train_accuracy}"
     )
 
@@ -198,7 +192,7 @@ def validate(classifier: TitleClassifier, val_loader: DataLoader) -> float:
 
     with torch.no_grad():
         for inputs, labels in val_loader:
-            inputs, labels = inputs.to(device), labels.to(device)
+            # inputs, labels = inputs.to(device), labels.to(device)
             outputs = classifier(inputs)
             _, target_indices = torch.max(labels, 1)
             _, predicted = torch.max(outputs.data, 1)
@@ -212,7 +206,7 @@ def validate(classifier: TitleClassifier, val_loader: DataLoader) -> float:
 
 
 if __name__ == "__main__":
-    embedding_model_path = "data/embedding_model_150_2_5_10_1_0_0.d2v"
+    embedding_model_path = "data/embedding_model_30_2_5_10_1_0_0.d2v"
     embedding_model = Doc2Vec.load(embedding_model_path)
 
     # Load and prepare data
@@ -244,9 +238,9 @@ if __name__ == "__main__":
     stream_log.info(f"Validation set size: {len(val_titles)}")
     stream_log.info("-" * 50)
 
-    vector_size = 150
-    hidden_sizes = [1000, 50]
-    epochs = 100
+    vector_size = 30
+    hidden_sizes = [1200, 1200]
+    epochs = 15
 
     # Train the classifier
     train_accuracy, validation_accuracy = train_model(

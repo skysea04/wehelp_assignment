@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>短文本分類預測</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #1a2634;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .prediction-form {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            display: none;
+        }
+
+        .feedback-buttons {
+            margin-top: 20px;
+            display: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            justify-content: center;
+        }
+
+        .feedback-buttons button {
+            background-color: #008CBA;
+            margin: 1px;
+            padding: 6px 12px;
+        }
+
+        .feedback-buttons button:hover {
+            background-color: #007399;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>歡迎使用短文本分類預測</h1>
+    </div>
+
+    <div class="prediction-form">
+        <h2>輸入一篇文章的標題</h2>
+        <input type="text" id="title" placeholder="輸入標題">
+        <button onclick="predict()">預測分類</button>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="result" class="result">
+        <h3>預測結果：<span id="prediction"></span></h3>
+        <h4>選擇您認為更正確的分類：</h4>
+        <div class="feedback-buttons">
+            {% for board in boards %}
+            <button onclick="sendFeedback('{{ board }}')">{{ board }}</button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        let currentPrediction = {
+            timestamp: null,
+            title: null
+        };
+
+        async function predict() {
+            const title = document.getElementById('title').value;
+            if (!title) {
+                alert('請輸入標題');
+                return;
+            }
+
+            // Show loading spinner and hide result
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            document.querySelector('.feedback-buttons').style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('title', title);
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                // Hide loading spinner and show result
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('prediction').textContent = data.prediction;
+                document.getElementById('result').style.display = 'block';
+                document.querySelector('.feedback-buttons').style.display = 'block';
+
+                currentPrediction.timestamp = data.timestamp;
+                currentPrediction.title = data.title;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                alert('預測失敗，請稍後再試');
+            }
+        }
+
+        async function sendFeedback(feedback) {
+            if (!currentPrediction.timestamp) {
+                alert('請先進行預測');
+                return;
+            }
+
+            try {
+                const response = await fetch('/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        timestamp: currentPrediction.timestamp,
+                        title: currentPrediction.title,
+                        feedback: feedback
+                    })
+                });
+                const data = await response.json();
+                if (data.ok) {
+                    alert('感謝您的回饋！');
+                } else {
+                    alert('回饋提交失敗，請稍後再試');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('回饋提交失敗，請稍後再試');
+            }
+        }
+    </script>
+</body>
+
+</html>

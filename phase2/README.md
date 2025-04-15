@@ -26,6 +26,11 @@ tokenized_file 文章數：1,067,546
 可以看到 [data](./data/) dir 有 [ex/](./data/ex/) dir，其中存放的都是 cleaner 改版前的數據。
 改版後的 embedding 實驗結果與數據可參照[此檔](./data/embedding_result.csv)
 
+#### 4/14 數據更新
+- `dm=0 / dbow_words=1`: 適合短文的組合，即使 similarity 的測試並沒有特別突出，但在後續的 title classifier 能建立神奇的功效，將 test accuracy 一股從 65% 左右的門檻拉到 84% ，非常神奇！！！
+最終 embedding model vector_size: 30
+
+
 ### Title Classifier
 到了最關鍵的分類模型，我設計了一個架構幫助我快速閱覽不同參數的實驗數據，
 實驗數據記錄檔：命名規則 `title_classification_result_{data_size}.csv`，幫助我快速評估不同訓練資料量的呈現結果，裡面會記錄`模型樣態`、`累積 epochs` 與`預測正確率`。
@@ -50,8 +55,23 @@ tokenized_file 文章數：1,067,546
 9. Train Accuracy: 78.2% / Test Accuracy: 64.7%
 
 
+#### 4/14 更新
+經過 embedding model 的重新調教後，數據如下
+1. Arrangement of Linear Layers: `30*1000*500*9`
+2. Activation Function for Hidden Layers: ReLU
+3. Activation Function for Output Layers: Softmax
+4. Loss Function: Categorical Cross Entropy
+5. Algorithms for Back-Propagation: Adam (Adaptive Moment Estimation)
+6. Total Number of Training Documents: 800,000
+7. Total Number of Testing Documents: 200,000
+8. Epochs: 30 / Learning Rate: 0.001
+9. Train Accuracy: 93.7% / Test Accuracy: 84%
+
+
 ### 後續思考
 1. 以本項任務來說，有個體悟是 embedding 本身在 `similarity` 的成效本身其實並不用看到太重，文章分類確實是個問題可以優化，但其實不需要追求到很高的 `self-similarity`，原因是我們最終又要把這些複雜的 vectors 分類為僅僅 9 個類別，即使他們在個別辨識上有很高的分辨率，對於「分類」這個問題可能也不是很關鍵的因素。
 2. 在過去的週一分享就有聽過不只一次有個訓練的方法是在 `hidden_layer` 拉大 `vector_size`，這件事本身很反直覺，我們應該是將變因(`vector_size`)逐漸縮小，就可以找到正確的類別，但最後實驗證實逐漸縮小的成效只能到某個程度就會停下來。而真的去實際嘗試這件事也是因爲發現 `input_layer` 的 `vector_size` 越大，成效就越好，才想到或許可以嘗試在 `hidden_layer` 加大的做法，不要讓 embedding model 無限擴張，沒想到有如此巨大的成效，算是一個蠻有趣的 take away。
 3. 最後得到這樣的 Train Accuracy 和 Test Accuracy，我覺得算是有 over fitting 的問題，但因為時間因素，已經沒空再深入探討要怎麼優化了。這趟旅程最大的啟發就是還是要找時間讀書，先累積一些前人研究過的概念（如何訓練等），才能快速在實驗中驗證，自己胡搞摸索就會像這次一樣最後搞不出個厲害的模型。這議題就又有點像一般在公司時做專案的兩難：你是要先用比較醜的方式把功能做出來，還是你要研究出「比較好的寫法」才實作，有時候因為和時間賽跑的緣故也由不得自己選，在平時是否有在累積些東西就變得很重要。
 4. 近一步思考這個模型如果做到最好，我猜測在預期新文章的準確率可能也頂多接近 70~80%，原因來自文章標題中所涵蓋的意義會隨著時代快速的變動，我們無法預測到下一季會有哪些動畫，在 c_chat 的標題會變得難以捉摸，我們也不會知道政治情勢三個月後的走向，hatepolitics 在討論的範圍可能截然不同，甚至不是過去所討論的議題或人物。當然也有些版可能討論的內容大同小異(x. boy-girl / pc_shopping)， 5090 顯卡過了一年也就變成 6090，相信模型還是抓得出來，男女議題也是千古不變。只是我們不得不承認，在無法有 agent 搜尋當下資料的模型，就只能像是過去的 chatgpt 一樣，不斷闡述「我的資料只到 2023/XX/XX」，這樣的模型會隨著時間的流逝越來越與當下脫節，最後變得不敷使用。在建造完單純的模型後如何與時間賽跑，目前大概還是個無解的難題。
+#### 4/14 更新
+5. 找到關鍵參數是訓練歷程中最重要的部分，漏掉關鍵參數即會失去模型寶貴的判斷力，算是學到一課，多讀書、多去嘗試新的方向是極為重要的成功指標，未來在訓練時一定要謹記這份教訓，也非常感謝彭彭邀請大家在會議中分享，訓練結果才能有這樣的巨大改變。
