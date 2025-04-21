@@ -55,7 +55,6 @@ numpy==1.26.4
     #   pandas
     #   scikit-learn
     #   scipy
-    #   torchvision
     #   transformers
 packaging==24.2
     # via
@@ -63,8 +62,6 @@ packaging==24.2
     #   transformers
 pandas==2.2.0
     # via -r requirements/base.txt
-pillow==11.1.0
-    # via torchvision
 pydantic==2.11.3
     # via fastapi
 pydantic-core==2.33.1
@@ -116,9 +113,6 @@ torch==2.6.0
     # via
     #   -r requirements/base.txt
     #   ckip-transformers
-    #   torchvision
-torchvision==0.21.0
-    # via -r requirements/base.txt
 tqdm==4.67.1
     # via
     #   ckip-transformers

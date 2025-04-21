@@ -4,7 +4,6 @@ ckip-transformers
 gensim
 scikit-learn
 torch
-torchvision
 fastapi==0.109.2
 uvicorn==0.27.1
 jinja2==3.1.3
